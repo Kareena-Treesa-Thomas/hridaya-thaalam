@@ -27,15 +27,19 @@ Pulse sensor (finger)
   │     baseline, debounced against noise    │
   │  3. Note engine — 7-note Sa–Ni scale,    │
   │     picked by that same distance         │
-  │  4. Music engine — Web Audio plays the   │
-  │     note; volume/decay scale with state  │
-  │  5. UI — every number on screen reflects │
-  │     the above, nothing is fabricated     │
+  │  4. Music engine — Web Audio plays only  │
+  │     synthesized musical notes            │
+  │  5. UI — BPM, graph, and pulse response  │
+  │     update live on screen                 │
   └─────────────────────────────────────────┘
 ```
 
 There is no cloud service, no API key, and no account required anywhere
 in this pipeline. Everything runs locally on the demo laptop.
+
+**Scope note:** this project intentionally stays focused on the pulse sensor,
+real-time dashboard, and generated music response. There is no speaker,
+OLED, LED display, or spoken-language output required in the final build.
 
 ---
 
@@ -43,6 +47,9 @@ in this pipeline. Everything runs locally on the demo laptop.
 
 **Parts needed:** Arduino Uno (or compatible), a pulse sensor module,
 3 jumper wires, USB cable (must be a data cable, not charge-only).
+
+This is the minimum hardware setup. No additional display, speaker, LED panel,
+or language output hardware is required for the current build.
 
 **Wiring:**
 
@@ -148,18 +155,20 @@ block — search for `processBPM`, `noteForDelta`, `stateForDelta`, and
 
 ## 4. Music — how sound is generated
 
-No sample files, no external library. Each note is synthesized live
-using the Web Audio API: a triangle oscillator through a lowpass
-filter, with a volume envelope (quick attack, exponential decay) that
-gives it a plucked-string character.
+No sample files, no external library, and no spoken output. Each note is
+synthesized live using the Web Audio API: a triangle oscillator through a
+lowpass filter, with a volume envelope (quick attack, exponential decay)
+that gives it a plucked-string character.
 
+- The project plays only musical note cues; it does not rely on spoken
+  English or Malayalam output.
 - To change which frequencies map to which note, edit the `NOTE_FREQ`
   object in the script.
 - To make notes sound different (e.g. more sustained, more percussive),
   adjust the `decaySeconds` calculation or the oscillator `type`
   (`'triangle'`, `'sine'`, `'sawtooth'`, `'square'`).
-- No setup required — this works the instant the page loads, in any
-  browser, with zero configuration.
+- No extra setup is required — the page starts producing music as soon as
+  the browser loads and the beat signal arrives.
 
 ---
 
