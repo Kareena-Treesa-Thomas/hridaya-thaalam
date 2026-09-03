@@ -106,8 +106,9 @@ void loop() {
             newBPM * 0.30;
         }
 
-        Serial.print("❤️ BEAT   BPM: ");
-        Serial.println(displayedBPM, 1);
+        Serial.print("BPM:");
+        Serial.println((int)round(displayedBPM));
+        
 
         // ------------------------------------------
         // MUSIC TRIGGER
