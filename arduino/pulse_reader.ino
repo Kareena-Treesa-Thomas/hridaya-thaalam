@@ -20,50 +20,115 @@
   A bad threshold is the #1 reason this looks like it "doesn't work."
   ------------------------------------------------------------
 */
+const int pulsePin = A0;
 
-const int PULSE_PIN = A0;
-const int THRESHOLD = 550;        // TUNE THIS — see notes above
-const unsigned long REFRACTORY_MS = 300; // ignore beats closer than this (caps ~200 BPM)
+// ---------- SETTINGS ----------
+const int MIN_BPM = 45;
+const int MAX_BPM = 140;
+
+const int MIN_INTERVAL = 430;   // ~140 BPM maximum
+const int MAX_INTERVAL = 1330;  // ~45 BPM minimum
+
+// How much the signal must rise above baseline
+int peakHeight = 40;
+
+// ---------- VARIABLES ----------
+float baseline = 0;
+float signal = 0;
+
+float peak = 0;
+
+bool abovePeak = false;
 
 unsigned long lastBeatTime = 0;
-bool armed = true;       // true = watching for a rising edge
-bool haveFirstBeat = false;
+
+// Smoothed BPM
+float displayedBPM = 0;
 
 void setup() {
+
   Serial.begin(9600);
+
+  // Get initial baseline
+  long total = 0;
+
+  for (int i = 0; i < 100; i++) {
+    total += analogRead(pulsePin);
+    delay(5);
+  }
+
+  baseline = total / 100.0;
+
+  Serial.println("Place finger on sensor...");
 }
 
 void loop() {
-  int signal = analogRead(PULSE_PIN);
 
-  // Rising edge above threshold = candidate beat
-  if (signal > THRESHOLD && armed) {
-    unsigned long now = millis();
-    unsigned long interval = now - lastBeatTime;
+  signal = analogRead(pulsePin);
 
-    if (!haveFirstBeat) {
-      // First beat only sets the clock, no BPM yet (interval is meaningless)
-      lastBeatTime = now;
-      haveFirstBeat = true;
-      armed = false;
-    } else if (interval > REFRACTORY_MS) {
-      int bpm = 60000 / interval;
+  // Slowly follow the signal baseline
+  baseline = baseline * 0.995 + signal * 0.005;
 
-      // Sanity filter — reject obviously bad readings (noise/movement)
-      if (bpm >= 40 && bpm <= 200) {
-        Serial.print("BPM:");
-        Serial.println(bpm);
+  // Difference from baseline
+  float difference = signal - baseline;
+
+  unsigned long now = millis();
+
+  // ------------------------------------------------
+  // PEAK DETECTION
+  // ------------------------------------------------
+
+  if (difference > peakHeight && !abovePeak) {
+
+    abovePeak = true;
+
+    // Time since previous beat
+    if (lastBeatTime > 0) {
+
+      unsigned long interval = now - lastBeatTime;
+
+      // Accept only realistic heartbeat intervals
+      if (interval >= MIN_INTERVAL &&
+          interval <= MAX_INTERVAL) {
+
+        float newBPM = 60000.0 / interval;
+
+        // First valid BPM
+        if (displayedBPM == 0) {
+
+          displayedBPM = newBPM;
+
+        } else {
+
+          // Gentle smoothing
+          displayedBPM =
+            displayedBPM * 0.70 +
+            newBPM * 0.30;
+        }
+
+        Serial.print("❤️ BEAT   BPM: ");
+        Serial.println(displayedBPM, 1);
+
+        // ------------------------------------------
+        // MUSIC TRIGGER
+        // ------------------------------------------
+
+        // Play your note HERE
+        //
+        // Example:
+        // tone(8, 440, 100);
+
       }
 
-      lastBeatTime = now;
-      armed = false;
     }
+
+    lastBeatTime = now;
   }
 
-  // Signal dropped back down — re-arm for the next beat
-  if (signal < THRESHOLD) {
-    armed = true;
+  // Signal must come down before another beat
+  if (difference < peakHeight / 2) {
+    abovePeak = false;
   }
 
-  delay(10);
+  delay(2);
 }
