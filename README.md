@@ -30,6 +30,15 @@ short_description: Real-time heartbeat-to-music interactive hardware-to-web expe
 
 ---
 
+## Basic Details
+### Team Name: Hridaya Thaalam
+
+### Team Members
+- Team Lead: KAREENA TREESA THOMAS - Muthoot Institute Of Technology and Science, Kochi
+- Member 2: ANJANAPRIYA V P - Muthoot Institute Of Technology and Science, Kochi
+
+---
+
 **Hridaya Thaalam** is a hardware-to-web pipeline that reads a heartbeat through an
 **Arduino pulse sensor**, learns the user's personal baseline, classifies their state
 as **Relaxed / Normal / Elevated**, and transforms heartbeat changes into **live music**
