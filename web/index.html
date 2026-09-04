@@ -850,36 +850,80 @@ function startSimulation(){
 
 // ---------- REAL SENSOR ----------
 async function connectSerial(){
-  if (!('serial' in navigator)){ alert('WebSerial is not supported in this browser. Use Chrome or Edge, or click "Run simulated data" instead.'); return; }
+  if (!('serial' in navigator)) {
+    alert('Web Serial is not supported in this browser. Please use Chrome or Edge on desktop, then click "Connect sensor" again.');
+    statusText.textContent = 'browser unsupported';
+    sourceState.textContent = 'Unsupported browser';
+    sourceState.className = 'state off';
+    return;
+  }
+
+  if (!navigator.serial) {
+    alert('Serial API is unavailable. Your browser may not allow Web Serial access. Use Chrome or Edge and make sure the page is served over localhost or HTTPS.');
+    statusText.textContent = 'serial unavailable';
+    sourceState.textContent = 'Serial unavailable';
+    sourceState.className = 'state off';
+    return;
+  }
+
   stopEverything();
+
   try {
     port = await navigator.serial.requestPort();
     await port.open({ baudRate: 9600 });
-    statusDot.classList.add('live'); statusText.textContent='connected — live sensor'; liveTag.textContent='live'; liveTag.style.background='#EAF9F0'; liveTag.style.color='#22C55E';
-    sourceState.textContent='Arduino (serial)'; sourceState.className='state ok';
-    sideArduino.innerHTML='<span class="bullet" style="background:currentColor;"></span>Connected'; sideArduino.className='dotline ok';
+
+    statusDot.classList.add('live');
+    statusText.textContent = 'connected — live sensor';
+    liveTag.textContent = 'live';
+    liveTag.style.background = '#EAF9F0';
+    liveTag.style.color = '#22C55E';
+    sourceState.textContent = 'Arduino (serial)';
+    sourceState.className = 'state ok';
+    sideArduino.innerHTML = '<span class="bullet" style="background:currentColor;"></span>Connected';
+    sideArduino.className = 'dotline ok';
 
     const textDecoder = new TextDecoderStream();
+    const writableStreamClosed = textDecoder.writable.getWriter();
     port.readable.pipeTo(textDecoder.writable);
     reader = textDecoder.readable.getReader();
+
     let buffer = '';
-    while (true){
+    while (true) {
       const { value, done } = await reader.read();
       if (done) break;
       buffer += value;
-      let lines = buffer.split('\n'); buffer = lines.pop();
-      for (const line of lines){ const match = line.match(/BPM:(\d+)/); if (match) processBPM(parseInt(match[1],10)); }
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        const match = line.match(/BPM:(\d+)/i);
+        if (match) processBPM(parseInt(match[1], 10));
+      }
     }
   } catch (err) {
-    statusText.textContent='connection failed';
-    sourceState.textContent='Connection failed'; sourceState.className='state off';
+    console.error('Serial connection error:', err);
+    statusText.textContent = 'connection failed';
+    sourceState.textContent = 'Connection failed';
+    sourceState.className = 'state off';
+    sideArduino.innerHTML = '<span class="bullet" style="background:currentColor;"></span>Not connected';
+    sideArduino.className = 'dotline off';
+    statusDot.classList.remove('live');
   }
 }
 
 function stopEverything(){
-  if (simInterval){ clearInterval(simInterval); simInterval=null; }
-  if (reader){ reader.cancel().catch(()=>{}); reader=null; }
-  if (port && port.readable){ port.close().catch(()=>{}); port=null; }
+  if (simInterval) { clearInterval(simInterval); simInterval = null; }
+  if (reader) {
+    reader.cancel().catch(() => {});
+    reader = null;
+  }
+  if (port && port.readable) {
+    try {
+      port.close().catch(() => {});
+    } catch (err) {
+      console.warn('Port close warning:', err);
+    }
+    port = null;
+  }
   statusDot.classList.remove('live');
 }
 

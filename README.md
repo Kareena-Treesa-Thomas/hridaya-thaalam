@@ -456,25 +456,19 @@ hridaya-thaalam/
 
 ### Screenshots
 
-> Add your screenshots here when preparing the final demo.
+Place the three project screenshots in the folder `docs/screenshots/` and keep the filenames below aligned with the images you want to showcase.
 
-![Live Dashboard](screenshots/dashboard.png)
+| 📊 Dashboard | 📈 BPM Graph + State & Music | 🧠 System Architecture |
+|:---:|:---:|:---:|
+| ![Dashboard](docs/screenshots/dashboard.jpeg) | ![BPM Graph and State/Music](docs/screenshots/heart-rate-graph.jpeg) | ![System Architecture](docs/screenshots/architecture.jpeg) |
 
-*Live dashboard showing BPM, waveform, and heartbeat-driven music UI.*
-
-![BPM Graph](screenshots/bpm-graph.png)
-
-*Pulse graph and musical note response in real time.*
-
-![State and Music](screenshots/state-music.png)
-
-*State change and music generation based on heartbeat variation.*
+*Live dashboard showing BPM and waveform, the combined BPM graph with state and music response, and the overall system architecture from pulse sensor to music output.*
 
 ---
 
 ## 🔄 Workflow / Architecture Diagram
 
-![Workflow](screenshots/workflow.png)
+![Workflow](docs/screenshots/architecture.jpeg)
 
 *The pulse sensor reads heartbeat data, Arduino processes and sends BPM over serial,
 and the browser maps it to music and real-time visualization.*
@@ -485,31 +479,18 @@ and the browser maps it to music and real-time visualization.*
 
 ## Schematic & Circuit
 
-![Circuit](hardware/circuit.png)
+| 🧩 Schematic Diagram | 🔌 Wiring Setup | ⚙️ Circuit Connection | 📷 Demo Setup |
+|:---:|:---:|:---:|:---:|
+| ![Schematic Diagram](docs/screenshots/schematic-diagram.jpeg) | ![Wiring Setup](docs/screenshots/circuit-setup.jpeg) | ![Circuit Connection](docs/screenshots/hardware-setup.jpeg) | ![Live Demo Setup](docs/screenshots/live-demo-setup.jpeg) |
 
-*Pulse sensor connected to the Arduino analog input and powered through the board.*
+### Hardware Details
 
-![Schematic](hardware/schematic.png)
+1. **Schematic Diagram**: Shows the complete signal flow from the pulse sensor to the Arduino Uno and then to the laptop via USB. It visually summarizes the pipeline: heartbeat signal → analog input → microcontroller → serial output → browser dashboard.
+2. **Wiring Setup**: Displays the actual pin mapping for the sensor. The pulse sensor is connected with VCC to 5V, GND to GND, and the signal wire to A0 on the Arduino.
+3. **Circuit Connection**: Captures the physical board setup including the sensor leads, USB cable, and the Arduino with power and serial connection ready for live data acquisition.
+4. **Demo Setup**: Demonstrates the real-world experimental setup where the sensor is placed on the finger and the Arduino is connected to the laptop for live heartbeat reading and BPM transmission.
 
-*Basic analog heart-rate sensing circuit using the pulse sensor module.*
-
----
-
-## 📷 Build Photos
-
-![Components](hardware/components.jpg)
-
-*Components used in the project: pulse sensor, Arduino board, USB cable, jumper
-wires and supporting hardware.*
-
-![Build](hardware/build.jpg)
-
-*Build process showing sensor wiring, Arduino setup and software integration.*
-
-![Final](hardware/final-build.jpg)
-
-*Final demo setup showing the pulse sensor connected to the Arduino and the rhythm
-dashboard running on the laptop.*
+This establishes the complete hardware loop used for the project: sensing → processing → serial communication → visualization → music generation.
 
 ---
 
