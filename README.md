@@ -498,7 +498,7 @@ This establishes the complete hardware loop used for the project: sensing → pr
 
 ## Video
 
-[Add your demo video link here]
+[https://drive.google.com/file/d/1nKZNsxWvbpjSYBc42sIk_VVKrsKm_nOS/view?usp=drivesdk]
 
 *The demonstration shows the complete pipeline from live pulse sensing to BPM
 visualization, state classification and heartbeat-driven melody generation.*
@@ -507,7 +507,7 @@ visualization, state classification and heartbeat-driven melody generation.*
 
 ## Additional Demos
 
-[Add any extra demo materials or links]
+[https://drive.google.com/file/d/1iI-z2DK6dXHLXh1kUagS7hFu-mFciJlb/view?usp=drivesdk]
 
 Possible materials include:
 
@@ -523,8 +523,8 @@ Possible materials include:
 
 # 👥 Team Contributions
 
-* **KAREENA TREESA THOMAS**: Designed the heartbeat-to-music logic and UI dashboard. Integrated the live visuals, note mapping, and testing.
-* **ANJANAPRIYA V P**: Worked on Arduino pulse sensing and serial communication.
+* **KAREENA TREESA THOMAS**: Designed the heartbeat-to-music logic and UI dashboard, deployment, note mapping, and testing.
+* **ANJANAPRIYA V P**: Worked on Arduino pulse sensing and serial communication, integration of hardware and software.
 
 
 ---
