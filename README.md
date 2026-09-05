@@ -523,8 +523,8 @@ Possible materials include:
 
 # 👥 Team Contributions
 
-* **KAREENA TREESA THOMAS**: Designed the heartbeat-to-music logic and UI dashboard, deployment, note mapping, and testing.
-* **ANJANAPRIYA V P**: Worked on Arduino pulse sensing and serial communication, integration of hardware and software.
+* **KAREENA TREESA THOMAS**: Designed the heartbeat-to-music logic and UI dashboard, deployment, note mapping, testing, and contributed to hardware setup and overall system integration.
+* **ANJANAPRIYA V P**: Worked on Arduino pulse sensing and serial communication, sensor connections, and hardware-software integration.
 
 
 ---
